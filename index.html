@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kaif Jamali Motors | Premium Bikes & Superbikes</title>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Supabase JS Client v2 SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <!-- Header / Navigation -->
+  <header>
+    <nav class="navbar">
+      <a href="#" class="brand-logo">
+        <div class="logo-icon">KJ</div>
+        <div class="brand-text">
+          <h1>Kaif Jamali</h1>
+          <span>Motors & Superbikes</span>
+        </div>
+      </a>
+
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+        <i class="fas fa-bars"></i>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="active">Home</a></li>
+        <li><a href="#inventory">Bikes Fleet</a></li>
+        <li><a href="#about">About Showroom</a></li>
+        <li><a href="#contact">Contact Us</a></li>
+      </ul>
+
+      <div class="header-actions">
+        <button class="btn btn-admin btn-sm" id="adminPortalBtn">
+          <i class="fas fa-lock"></i> Admin Login
+        </button>
+        <a href="#inventory" class="btn btn-primary btn-sm">
+          <i class="fas fa-motorcycle"></i> Browse Bikes
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="hero-container">
+      <div class="hero-content">
+        <div class="hero-tag">
+          <i class="fas fa-bolt"></i> Premium Flagship Fleet 2026
+        </div>
+        <h1 class="hero-title">
+          Engineered for <span>Thrill & Speed</span>.
+        </h1>
+        <p class="hero-description">
+          Welcome to Kaif Jamali Motors. Discover the world’s most prestigious superbikes, cruisers, hyper-electric, and sport performance motorcycles built to conquer every highway.
+        </p>
+        <div class="hero-actions">
+          <a href="#inventory" class="btn btn-primary">
+            <i class="fas fa-motorcycle"></i> Explore Fleet
+          </a>
+          <a href="#contact" class="btn btn-outline">
+            <i class="fas fa-calendar-alt"></i> Book Test Ride
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <h3>50<span>+</span></h3>
+            <p>Superbikes</p>
+          </div>
+          <div class="stat-item">
+            <h3>100<span>%</span></h3>
+            <p>Certified Quality</p>
+          </div>
+          <div class="stat-item">
+            <h3>24/7</h3>
+            <p>Customer Support</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-image-wrapper">
+          <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&w=1200&q=80" alt="Kaif Jamali Flagship Superbike">
+          <div class="badge-floating">
+            <i class="fas fa-trophy"></i>
+            <div>
+              <strong>Kaif Jamali Edition</strong>
+              <span>Supercharged Performance</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features / Advantages -->
+  <section class="features-bar">
+    <div class="features-container">
+      <div class="feature-box">
+        <i class="fas fa-shield-alt"></i>
+        <div>
+          <h4>Official Warranty</h4>
+          <p>3-Year Comprehensive Cover</p>
+        </div>
+      </div>
+      <div class="feature-box">
+        <i class="fas fa-percentage"></i>
+        <div>
+          <h4>0% Interest Finance</h4>
+          <p>Flexible EMI installment plans</p>
+        </div>
+      </div>
+      <div class="feature-box">
+        <i class="fas fa-truck-fast"></i>
+        <div>
+          <h4>Nationwide Delivery</h4>
+          <p>Insured door-step dispatch</p>
+        </div>
+      </div>
+      <div class="feature-box">
+        <i class="fas fa-tools"></i>
+        <div>
+          <h4>Master Tuning</h4>
+          <p>Dyno tested & certified</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Inventory / Catalog Section -->
+  <section class="catalog-section" id="inventory">
+    <div class="section-header">
+      <span class="section-subtitle">Kaif Jamali Showroom</span>
+      <h2 class="section-title">Explore Available Bikes (<span id="bikeCount">0</span>)</h2>
+    </div>
+
+    <!-- Filter & Search Controls -->
+    <div class="controls-bar">
+      <div class="category-tabs">
+        <button class="tab-btn active" data-category="All">All Bikes</button>
+        <button class="tab-btn" data-category="Superbike">Superbike</button>
+        <button class="tab-btn" data-category="Sport">Sport</button>
+        <button class="tab-btn" data-category="Cruiser">Cruiser</button>
+        <button class="tab-btn" data-category="Electric">Electric</button>
+        <button class="tab-btn" data-category="Adventure">Adventure</button>
+      </div>
+
+      <div class="search-sort-group">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="Search by bike model or brand...">
+        </div>
+        <select id="sortSelect" class="sort-select">
+          <option value="default">Sort by: Default</option>
+          <option value="price-low">Price: Low to High</option>
+          <option value="price-high">Price: High to Low</option>
+          <option value="name">Name: A - Z</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Bikes Dynamic Grid -->
+    <div class="bikes-grid" id="bikesGrid">
+      <!-- Injected via JavaScript -->
+    </div>
+  </section>
+
+  <!-- About Us & Showroom Section -->
+  <section class="info-section" id="about">
+    <div class="info-container">
+      <div class="info-card">
+        <span class="section-subtitle">Exclusive Dealership</span>
+        <h3>Kaif Jamali Motors Experience</h3>
+        <p>
+          Founded with a passion for high-octane engineering and luxury aesthetics, Kaif Jamali Motors provides motorcycle enthusiasts with hand-picked superbikes, custom editions, and electric innovations.
+        </p>
+        <p>
+          Every bike in our collection undergoes a 120-point mechanical inspection before delivery, ensuring unparalleled performance, reliability, and peace of mind on the road.
+        </p>
+        <div class="contact-meta">
+          <div class="contact-meta-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <div>
+              <strong>Headquarters & Showroom</strong>
+              <span>Kaif Jamali Motors Blvd, Auto District</span>
+            </div>
+          </div>
+          <div class="contact-meta-item">
+            <i class="fas fa-phone-alt"></i>
+            <div>
+              <strong>VIP Hotline / Sales</strong>
+              <span>+1 (800) 524-3526 | +92 300 1234567</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-card" id="contact">
+        <span class="section-subtitle">Get In Touch</span>
+        <h3>Visit Showroom or Book Test Ride</h3>
+        <p>Interested in a specific superbike? Our specialists are available 7 days a week to schedule a private walkthrough or custom finance consultation.</p>
+        <form id="contactDirectForm" onsubmit="event.preventDefault(); showToast('Thank you! Kaif Jamali representative will contact you.'); this.reset();">
+          <div class="form-group">
+            <label>Your Full Name</label>
+            <input type="text" placeholder="e.g. John Doe" required>
+          </div>
+          <div class="form-group">
+            <label>Phone / WhatsApp Number</label>
+            <input type="tel" placeholder="+1..." required>
+          </div>
+          <div class="form-group">
+            <label>Interested Bike Model</label>
+            <input type="text" placeholder="e.g. Kawasaki Ninja H2R / BMW S1000RR">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+            <i class="fas fa-paper-plane"></i> Send Direct Inquiry
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div>
+        <a href="#" class="brand-logo" style="margin-bottom: 1rem;">
+          <div class="logo-icon">KJ</div>
+          <div class="brand-text">
+            <h1>Kaif Jamali</h1>
+            <span>Motors</span>
+          </div>
+        </a>
+        <p style="color: var(--text-muted); max-width: 320px; font-size: 0.9rem;">
+          The premier marketplace for high-performance bikes, custom superbikes, and electric hyper-motorcycles.
+        </p>
+      </div>
+
+      <div>
+        <h4 style="color: #fff; margin-bottom: 1rem;">Quick Links</h4>
+        <ul style="list-style: none; color: var(--text-muted); line-height: 2;">
+          <li><a href="#home" style="color: inherit; text-decoration: none;">Home</a></li>
+          <li><a href="#inventory" style="color: inherit; text-decoration: none;">Available Fleet</a></li>
+          <li><a href="#about" style="color: inherit; text-decoration: none;">About Kaif Jamali</a></li>
+          <li><a href="#contact" style="color: inherit; text-decoration: none;">Book Consultation</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 style="color: #fff; margin-bottom: 1rem;">Admin Access</h4>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Manage inventory & customer orders in real-time.</p>
+        <button class="btn btn-outline btn-sm" onclick="document.getElementById('adminPortalBtn').click()">
+          <i class="fas fa-sliders"></i> Open Admin Panel
+        </button>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 Kaif Jamali Motors. All rights reserved. Powered by Supabase Backend.</p>
+      <div style="display: flex; gap: 1rem; font-size: 1.1rem;">
+        <i class="fab fa-instagram" style="cursor: pointer;"></i>
+        <i class="fab fa-facebook" style="cursor: pointer;"></i>
+        <i class="fab fa-youtube" style="cursor: pointer;"></i>
+        <i class="fab fa-twitter" style="cursor: pointer;"></i>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- MODAL 1: Bike Details Popup -->
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Bike Specifications</h3>
+        <button class="modal-close" onclick="closeModal('detailModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="bike-detail-grid">
+          <div>
+            <img id="detailModalImage" class="detail-image" src="" alt="Bike Preview">
+          </div>
+          <div>
+            <span id="detailModalBrand" class="card-brand"></span>
+            <h2 id="detailModalTitle" style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.5rem;"></h2>
+            <div id="detailModalPrice" style="font-size: 1.8rem; font-weight: 900; color: var(--primary); margin-bottom: 1rem;"></div>
+
+            <div class="detail-specs-list">
+              <div class="spec-box">
+                <span>Top Speed</span>
+                <strong id="detailModalSpeed"></strong>
+              </div>
+              <div class="spec-box">
+                <span>Engine</span>
+                <strong id="detailModalEngine"></strong>
+              </div>
+              <div class="spec-box">
+                <span>Max Power</span>
+                <strong id="detailModalPower"></strong>
+              </div>
+              <div class="spec-box">
+                <span>Stock Status</span>
+                <strong id="detailModalStock"></strong>
+              </div>
+            </div>
+
+            <p id="detailModalDesc" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;"></p>
+
+            <button class="btn btn-primary" id="detailModalOrderBtn" style="width: 100%;">
+              <i class="fas fa-shopping-bag"></i> Proceed to Order / Inquiry
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: Order / Inquiry Submission Form -->
+  <div class="modal-overlay" id="orderModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Order Inquiry & Booking</h3>
+        <button class="modal-close" onclick="closeModal('orderModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="display: flex; align-items: center; gap: 1rem; background: var(--bg-secondary); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; border: 1px solid var(--border-color);">
+          <img id="orderBikeImg" src="" style="width: 70px; height: 70px; object-fit: cover; border-radius: var(--radius-sm);">
+          <div>
+            <h4 id="orderBikeTitle" style="font-size: 1.1rem; color: var(--text-main);"></h4>
+            <span id="orderBikePrice" style="font-size: 1.2rem; font-weight: 800; color: var(--primary);"></span>
+          </div>
+        </div>
+
+        <form id="orderForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" id="custName" placeholder="Enter your name" required>
+            </div>
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" id="custEmail" placeholder="name@example.com" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Phone Number *</label>
+              <input type="tel" id="custPhone" placeholder="+1..." required>
+            </div>
+            <div class="form-group">
+              <label>City / Location *</label>
+              <input type="text" id="custCity" placeholder="City name" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Additional Notes / Custom Requests</label>
+            <textarea id="custMessage" rows="3" placeholder="Specify preferred payment option, delivery date, or custom features..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+            <i class="fas fa-paper-plane"></i> Submit Order Inquiry
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: Admin Login Popup -->
+  <div class="modal-overlay" id="adminLoginModal">
+    <div class="modal-card" style="max-width: 420px;">
+      <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-user-shield" style="color: var(--primary);"></i> Admin Access</h3>
+        <button class="modal-close" onclick="closeModal('adminLoginModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-bottom: 1.2rem;">
+          Enter your Kaif Jamali Motors admin password to access backend inventory controls & order management.
+        </p>
+        <form id="adminLoginForm">
+          <div class="form-group">
+            <label>Admin Password</label>
+            <input type="password" id="adminPass" placeholder="Enter password (default: admin123)" required>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+            <i class="fas fa-sign-in-alt"></i> Login to Admin Panel
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: Admin Dashboard Modal / Control Center -->
+  <div class="modal-overlay" id="adminDashboardModal">
+    <div class="modal-card admin-modal-card">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <div class="logo-icon" style="width: 36px; height: 36px; font-size: 1.1rem;">KJ</div>
+          <h3 class="modal-title">Kaif Jamali Motors - Admin Control Center</h3>
+        </div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <button class="btn btn-danger btn-sm" onclick="handleAdminLogout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+          <button class="modal-close" onclick="closeModal('adminDashboardModal')">&times;</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        
+        <!-- Admin Navigation Tabs -->
+        <div class="admin-tabs">
+          <button class="admin-tab-btn active" id="tabBtn-inventory" onclick="switchAdminTab('inventory')">
+            <i class="fas fa-boxes"></i> Bike Inventory Management
+          </button>
+          <button class="admin-tab-btn" id="tabBtn-orders" onclick="switchAdminTab('orders')">
+            <i class="fas fa-receipt"></i> Customer Inquiries & Orders
+          </button>
+          <button class="admin-tab-btn" id="tabBtn-database" onclick="switchAdminTab('database')">
+            <i class="fas fa-database"></i> Supabase Setup & SQL Schema
+          </button>
+        </div>
+
+        <!-- TAB 1: Bike Inventory CRUD -->
+        <div class="admin-tab-content active" id="tabContent-inventory">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;">
+            <h4>Active Fleet Listings</h4>
+            <button class="btn btn-primary btn-sm" onclick="openAddBikeModal()">
+              <i class="fas fa-plus"></i> Add New Bike
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Model / Brand</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Top Speed</th>
+                  <th>Stock</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminBikesTableBody">
+                <!-- Injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 2: Customer Orders & Inquiries -->
+        <div class="admin-tab-content" id="tabContent-orders">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;">
+            <h4>Received Customer Orders</h4>
+            <button class="btn btn-outline btn-sm" onclick="loadAdminOrders()">
+              <i class="fas fa-sync"></i> Refresh Orders
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Customer</th>
+                  <th>Contact / City</th>
+                  <th>Requested Bike</th>
+                  <th>Notes</th>
+                  <th>Update Status</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="adminOrdersTableBody">
+                <!-- Injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 3: Supabase Config & SQL setup helper -->
+        <div class="admin-tab-content" id="tabContent-database">
+          <h4 style="margin-bottom: 0.5rem;">Supabase Connection Status</h4>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+            API Endpoint: <strong style="color: var(--primary);">https://aspnzrvupuwtpvlzphnr.supabase.co</strong>
+          </p>
+
+          <div style="background: var(--bg-secondary); padding: 1.2rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin-bottom: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+              <strong style="color: #fff;"><i class="fas fa-code"></i> Supabase SQL Setup Script (schema.sql)</strong>
+              <button class="btn btn-outline btn-sm" onclick="copySqlSchema()">
+                <i class="fas fa-copy"></i> Copy SQL
+              </button>
+            </div>
+            <pre class="sql-box" id="sqlText">
+-- Run this in Supabase SQL Editor (aspnzrvupuwtpvlzphnr)
+CREATE TABLE IF NOT EXISTS public.bikes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    title VARCHAR(255) NOT NULL,
+    brand VARCHAR(100) NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    price NUMERIC NOT NULL,
+    image_url TEXT NOT NULL,
+    top_speed VARCHAR(50),
+    engine VARCHAR(100),
+    power VARCHAR(100),
+    stock VARCHAR(50) DEFAULT 'In Stock',
+    description TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS public.orders (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    customer_name VARCHAR(255) NOT NULL,
+    customer_email VARCHAR(255) NOT NULL,
+    customer_phone VARCHAR(50) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    bike_id VARCHAR(255),
+    bike_title VARCHAR(255) NOT NULL,
+    bike_price NUMERIC NOT NULL,
+    message TEXT,
+    status VARCHAR(50) DEFAULT 'Pending',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+ALTER TABLE public.bikes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.orders ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow public read access to bikes" ON public.bikes FOR SELECT USING (true);
+CREATE POLICY "Allow all actions on bikes" ON public.bikes FOR ALL USING (true);
+CREATE POLICY "Allow public insert into orders" ON public.orders FOR INSERT WITH CHECK (true);
+CREATE POLICY "Allow all actions on orders" ON public.orders FOR ALL USING (true);
+            </pre>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: Add / Edit Bike Form Modal -->
+  <div class="modal-overlay" id="bikeFormModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="bikeFormTitle">Add New Bike Listing</h3>
+        <button class="modal-close" onclick="closeModal('bikeFormModal')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="bikeForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Bike Model Title *</label>
+              <input type="text" id="formTitle" placeholder="e.g. Kawasaki Ninja H2R" required>
+            </div>
+            <div class="form-group">
+              <label>Brand / Manufacturer *</label>
+              <input type="text" id="formBrand" placeholder="e.g. Kawasaki / BMW" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Category *</label>
+              <select id="formCategory" required>
+                <option value="Superbike">Superbike</option>
+                <option value="Sport">Sport</option>
+                <option value="Cruiser">Cruiser</option>
+                <option value="Electric">Electric</option>
+                <option value="Adventure">Adventure</option>
+                <option value="Scooter">Scooter</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Price ($ USD) *</label>
+              <input type="number" id="formPrice" placeholder="e.g. 25000" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Image URL *</label>
+            <input type="url" id="formImage" placeholder="https://images.unsplash.com/..." required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Top Speed (e.g. 300 km/h)</label>
+              <input type="text" id="formSpeed" placeholder="300 km/h">
+            </div>
+            <div class="form-group">
+              <label>Engine Specs (e.g. 998cc Inline-4)</label>
+              <input type="text" id="formEngine" placeholder="998cc Inline-4">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Max Power Output (e.g. 210 HP)</label>
+              <input type="text" id="formPower" placeholder="210 HP">
+            </div>
+            <div class="form-group">
+              <label>Stock Status</label>
+              <select id="formStock">
+                <option value="In Stock">In Stock</option>
+                <option value="Limited">Limited Availability</option>
+                <option value="Pre-Order">Pre-Order</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Detailed Description</label>
+            <textarea id="formDesc" rows="3" placeholder="Enter key features, aerodynamics, and highlights..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%;">
+            <i class="fas fa-save"></i> Save Bike to Catalog
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Logic -->
+  <script src="supabase-config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
